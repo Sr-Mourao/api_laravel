@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Exceptions\EmailAlreadyVerifiedException;
+use App\Exceptions\TokenInvalidException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\VerifyEmailRequest;
 use App\Http\Resources\User\UserResource;
@@ -17,23 +19,19 @@ class VerifyEmailController extends Controller
 
         $user = User::query()
             ->whereToken($input['token'])
-            ->firstOrFail();
+            ->first();
+        
+
+        if (!$user) {
+            throw new TokenInvalidException();
+        }
+
+        if ($user->email_verified_at) {
+            throw new EmailAlreadyVerifiedException();
+        }
 
         $user->email_verified_at = now();
         $user->save();
-
-        
-
-        // if (!$user) {
-        //     throw new TokenInvalidException();
-        // }
-
-        // if ($user->email_verified_at) {
-        //     throw new EmailAlreadyVerifiedException();
-        // }
-
-        // $user->email_verified_at = now();
-        // $user->save();
 
         return new UserResource($user);
     }
