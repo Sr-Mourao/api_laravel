@@ -3,9 +3,9 @@
 namespace App\Listeners;
 
 use App\Mail\ForgotPasswordTokenMail;
+use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 
 class SendForgotPasswordTokenListener
@@ -24,6 +24,8 @@ class SendForgotPasswordTokenListener
     public function handle(object $event): void
     {
         $user = $event->user;
-        Mail::to($user->email)->send(new ForgotPasswordTokenMail($user));
+        $token = $event->token;
+        Mail::to($user->email)
+            ->send(new ForgotPasswordTokenMail($user, $token));
     }
 }

@@ -2,7 +2,8 @@
 
 
 
-use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\PasswordForgotController;
+use App\Http\Controllers\Auth\PasswordResetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,4 +19,5 @@ Route::post('/login', LoginController::class);
 Route::post('/logout', LogoutController::class);
 Route::post('/register', RegisterController::class);
 Route::post('/verify-email', VerifyEmailController::class);
-Route::post('/forgot-password', ForgotPasswordController::class);
+Route::post('/forgot-password', PasswordForgotController::class);
+Route::post('/reset-password', PasswordResetController::class);
